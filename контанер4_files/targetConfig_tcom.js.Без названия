@@ -1,0 +1,30 @@
+// Target Configuration Toyota
+(function (dl) {
+  var config = dl.pageConfig || {};
+  var targetProps = config.target || {};
+  window.targetGlobalSettings = {
+    bodyHidingEnabled: targetProps.bodyHidingEnabled || false
+  };
+}(window._dL || {}));
+
+window.targetPageParams = function () {
+  var dl = window._dL || {};
+  var page = dl.page || {};
+  var config = dl.pageConfig || {};
+  var target = config.target || {};
+  return Object.assign({
+    at_property: target.at_property || 'a1554d3f-1e76-6094-d750-f75b73b4d7f7'
+  }, page);
+};
+document.addEventListener('at-request-succeeded', function (event) {
+  var detail = event.detail || {};
+  var responseTokens = detail.responseTokens || [];
+  if (responseTokens.length > 0) {
+    window.mboxRecipe = responseTokens.map(function (token) {
+      return {
+        campaign: token['activity.name'],
+        recipe: token['experience.name']
+      };
+    });
+  }
+});
